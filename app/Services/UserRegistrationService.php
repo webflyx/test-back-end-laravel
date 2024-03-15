@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\UserRegisterException;
+use App\Facades\TinyPngFacade;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -38,8 +39,9 @@ class UserRegistrationService
             throw new UserRegisterException('User with this phone or email already exist.');
         }
 
-        //TODO: TINYPNG
-        $data['photo'] = $request->file('photo')->store('user-photo', 'public');
+        $photo = TinyPngFacade::store($request->file('photo'), 'public/user-photo/');
+        $data['photo'] = $photo;
+
         DB::table('user_registration_tokens')->where('token', $request->header('Token'))->delete();
 
         return User::create($data);

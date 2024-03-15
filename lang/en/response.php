@@ -14,5 +14,10 @@ return [
     */
 
     'Something went wrong.' => 'Something went wrong.',
+    'New user successfully registered.' => 'New user successfully registered.',
+    'Token is empty.' => 'Token is empty.',
+    'Token is invalidate.' => 'Token is invalidate.',
+    'The token expired.' => 'The token expired.',
+    'User with this phone or email already exist.' => 'User with this phone or email already exist.',
 
 ];

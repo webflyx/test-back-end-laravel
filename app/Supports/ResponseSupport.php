@@ -26,16 +26,14 @@ class ResponseSupport
     }
 
     /**
-     * @param string $error
+     * @param array $params
      * @param int $code
      * @return JsonResponse
      */
-    public static function error(string $error = 'Something went wrong.', int $code = 400): JsonResponse
+    public static function error(array $params = [], int $code = 400): JsonResponse
     {
         return response()->json([
-                'errors' => [
-                    'error'=> __('response.'.$error)
-                ],
+            ...$params,
         ], $code);
     }
 }

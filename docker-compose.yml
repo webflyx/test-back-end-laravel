@@ -1,0 +1,101 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      args:
+        user: admin
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: ${APP_SLUG}-app
+    container_name: ${APP_SLUG}-app
+    restart: unless-stopped
+    working_dir: /var/www/${APP_SLUG}.loc/
+    volumes:
+      - ./:/var/www/${APP_SLUG}.loc
+    networks:
+    - ${APP_SLUG}
+
+  nginx:
+    image: nginx:latest
+    container_name: ${APP_SLUG}-nginx-container
+    restart: unless-stopped
+    ports:
+        - 8000:80
+    volumes:
+        - ./:/var/www/${APP_SLUG}.loc
+        - ./docker-compose/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+        - ${APP_SLUG}
+
+  db:
+    container_name: ${APP_SLUG}-postgres-container
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - bd-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    networks:
+      - ${APP_SLUG}
+
+  db-test:
+      container_name: ${APP_SLUG}-postgres-container-testing
+      image: postgres:latest
+      environment:
+          POSTGRES_USER: ${DB_USERNAME}
+          POSTGRES_PASSWORD: ${DB_PASSWORD}
+          POSTGRES_DB: ${DB_DATABASE_TEST}
+      ports:
+          - "5433:5432"
+      networks:
+          - ${APP_SLUG}
+
+  redis:
+    container_name: ${APP_SLUG}-redis-container
+    image: redis:latest
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis:/data
+    networks:
+      - ${APP_SLUG}
+
+  laravel-queue:
+      container_name: ${APP_SLUG}-queue-container
+      restart: always
+      image: ${APP_SLUG}-app
+      command: php artisan queue:work
+      volumes:
+        - ./:/var/www/${APP_SLUG}.loc
+      networks:
+        - ${APP_SLUG}
+      depends_on:
+        - app
+        - redis
+        - db
+
+volumes:
+  bd-data:
+  bd-data-test:
+  pgadmin-data:
+  redis:
+    driver: local
+
+networks:
+    abz-agency:
+        driver: bridge

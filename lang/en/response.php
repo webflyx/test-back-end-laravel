@@ -19,5 +19,7 @@ return [
     'Token is invalidate.' => 'Token is invalidate.',
     'The token expired.' => 'The token expired.',
     'User with this phone or email already exist.' => 'User with this phone or email already exist.',
+    'Validation failed' => 'Validation failed',
+    'Page not found.' => 'Page not found.',
 
 ];

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\V1\UserRegistrationController;
+use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Middleware\RegisterValidToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -18,10 +18,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
 
-    Route::get('/token', [UserRegistrationController::class, 'getRegisterToken']);
+    Route::get('/token', [UserController::class, 'getRegisterToken']);
 
     Route::prefix('users')->group(function () {
-        Route::post('/', [UserRegistrationController::class, 'registerUser'])->middleware(RegisterValidToken::class);
+        Route::get('/', [UserController::class, 'index']);
+        Route::post('/', [UserController::class, 'store'])->middleware(RegisterValidToken::class);
     });
 
 });

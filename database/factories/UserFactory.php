@@ -29,7 +29,7 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'phone' => fake()->unique()->phoneNumber(),
-            'position_id' => Position::all()->random()->first()->id,
+            'position_id' => Position::all()->random()->id,
             'email_verified_at' => now(),
         ];
     }

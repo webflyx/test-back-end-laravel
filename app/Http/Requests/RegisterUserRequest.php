@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\JsonResponse;
 
 class RegisterUserRequest extends FormRequest
 {
@@ -36,5 +39,16 @@ class RegisterUserRequest extends FormRequest
             'photo.max' => 'The photo may not be greater than 5 Mbytes.',
             'photo.dimensions' => 'The photo must be 70x70 pixels.',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            response()->json([
+                'success' => false,
+                'message' => __('response.'.'Validation failed'),
+                'fails' => $validator->errors(),
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
+        );
     }
 }

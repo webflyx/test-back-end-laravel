@@ -101,4 +101,17 @@ class UserService
 
         return $data;
     }
+
+    /**
+     * @param $id
+     * @return UserResource[]
+     */
+    public function show($id): array
+    {
+        $user = User::where('id', $id)->firstOrFail();
+        return [
+            'user' => new UserResource($user)
+        ];
+
+    }
 }

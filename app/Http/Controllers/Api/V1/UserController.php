@@ -6,11 +6,16 @@ use App\Exceptions\UserRegisterException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetUsersRequest;
 use App\Http\Requests\RegisterUserRequest;
+use App\Http\Requests\UserShowRequest;
+use App\Models\User;
 use App\Services\UserService;
 use App\Supports\ResponseSupport;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -90,6 +95,40 @@ class UserController extends Controller
             return ResponseSupport::error([
                 'success' => false,
                 'message' => __('response.' . $e->getMessage())
+            ], 404);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return ResponseSupport::error();
+        }
+    }
+
+    /**
+     * Show single user
+     *
+     * @param UserShowRequest $request
+     * @param int $id
+     * @param UserService $service
+     * @return JsonResponse
+     */
+    public function show(UserShowRequest $request, int $id, UserService $service)
+    {
+        try {
+            $data = $service->show($id);
+
+            return ResponseSupport::success(params: [
+                'success' => true,
+                ...$data
+            ]);
+
+        } catch (ModelNotFoundException $e) {
+            return ResponseSupport::error([
+                'success' => false,
+                'message' => __('response.'.'The user with the requested identifier does not exist'),
+                'fails' => [
+                    'user_id' => [
+                        __('response.'.'User not found')
+                    ]
+                ]
             ], 404);
         } catch (Exception $e) {
             Log::error($e->getMessage());

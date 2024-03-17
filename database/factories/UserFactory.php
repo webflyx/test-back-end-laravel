@@ -25,10 +25,12 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $phone = '+380' . fake()->numberBetween(000000000, 999999999);
+        
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'phone' => fake()->unique()->phoneNumber(),
+            'phone' => $phone,
             'position_id' => Position::all()->random()->id,
             'email_verified_at' => now(),
         ];

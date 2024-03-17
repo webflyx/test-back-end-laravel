@@ -27,5 +27,9 @@ Route::prefix('v1')->group(function () {
         Route::post('/', [UserController::class, 'store'])->middleware(RegisterValidToken::class);
     });
 
+    Route::prefix('positions')->group(function () {
+       Route::get('/', [PositionController::class, 'index']);
+    });
+
 
 });

@@ -21,5 +21,8 @@ return [
     'User with this phone or email already exist.' => 'User with this phone or email already exist.',
     'Validation failed' => 'Validation failed',
     'Page not found.' => 'Page not found.',
+    'The user with the requested identifier does not exist' => 'The user with the requested identifier does not exist',
+    'User not found' => 'User not found',
+    'Positions not found' => 'Positions not found'
 
 ];

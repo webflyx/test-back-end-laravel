@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
         $fileName = basename($photo);
         $imagePathFormat = 'user-photo/' . $fileName;
 
-        User::factory(2)->create([
+        User::factory(45)->create([
             'photo' => $imagePathFormat
         ]);
     }

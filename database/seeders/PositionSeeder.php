@@ -17,7 +17,7 @@ class PositionSeeder extends Seeder
 
         foreach ($positions as $position) {
             Position::create([
-                'title' => $position
+                'name' => $position
             ]);
         }
     }

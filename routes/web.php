@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Position;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +16,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $positions = Position::all();
+    $users = User::orderBy('created_at', 'DESC')->paginate(5);
+
+    return view('app', compact('users', 'positions'));
 });

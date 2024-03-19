@@ -83,6 +83,7 @@
 </body>
 
 <script>
+    // Register new user
     document.getElementById('register-user').addEventListener('submit', function (event) {
         event.preventDefault(); // Prevent the default form submission
         let formData = new FormData(this);
@@ -141,7 +142,6 @@
                 })
                 .catch(error => {
                     console.error(error);
-                    // Handle error, show error message, etc.
                 });
         }
 
@@ -150,6 +150,7 @@
 </script>
 
 <script>
+    //Show users paginate
     document.getElementById('show-more-users').addEventListener('click', function () {
         let page = parseInt(document.getElementById('show-more-users').getAttribute('data-page')) + 1;
         fetch('/api/v1/users?page=' + page)

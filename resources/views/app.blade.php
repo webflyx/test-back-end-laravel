@@ -23,8 +23,11 @@
 
     <div>
         <div id="users-container"
-             class="grid grid-cols-4 gap-4 bg-gray-100 p-4 rounded-md shadow-md dark:bg-gray-800 dark:border-gray-600 dark:text-white">
+             class="grid grid-cols-5 gap-4 bg-gray-100 p-4 rounded-md shadow-md dark:bg-gray-800 dark:border-gray-600 dark:text-white">
             @foreach ($users as $user)
+                <div>
+                    <img src="/storage/{{$user->photo}}" alt="photo-{{ $user->name }}">
+                </div>
                 <div>{{ $user->name }}</div>
                 <div>{{ $user->email }}</div>
                 <div>{{ $user->phone }}</div>
@@ -42,22 +45,26 @@
         <form method="POST" id="register-user">
             <div class="mb-4">
                 <label for="name" class="block text-gray-700 dark:text-white font-bold mb-2">Name:</label>
-                <input type="text" id="name" name="name" class="form-input w-60 px-4 py-2 rounded-md border-gray-300 text-black">
+                <input type="text" id="name" name="name"
+                       class="form-input w-60 px-4 py-2 rounded-md border-gray-300 text-black">
             </div>
 
             <div class="mb-4">
                 <label for="email" class="block text-gray-700 dark:text-white font-bold mb-2">Email:</label>
-                <input type="email" id="email" name="email" class="form-input w-60 px-4 py-2 rounded-md border-gray-300 text-black">
+                <input type="email" id="email" name="email"
+                       class="form-input w-60 px-4 py-2 rounded-md border-gray-300 text-black">
             </div>
 
             <div class="mb-4">
                 <label for="phone" class="block text-gray-700 dark:text-white font-bold mb-2">Phone:</label>
-                <input type="text" id="phone" name="phone" class="w-60 px-4 py-2 form-input rounded-md border-gray-300 text-black">
+                <input type="text" id="phone" name="phone"
+                       class="w-60 px-4 py-2 form-input rounded-md border-gray-300 text-black">
             </div>
 
             <div class="mb-4">
                 <label for="position_id" class="block text-gray-700 dark:text-white font-bold mb-2">Position:</label>
-                <select name="position_id" id="position_id" class="w-60 px-4 py-2 form-input rounded-md border-gray-300 text-black">
+                <select name="position_id" id="position_id"
+                        class="w-60 px-4 py-2 form-input rounded-md border-gray-300 text-black">
                     @foreach($positions as $position)
                         <option value="{{$position->id}}">{{$position->name}}</option>
                     @endforeach
@@ -89,8 +96,8 @@
         let formData = new FormData(this);
 
         // Get form data
-         function getToken () {
-             fetch('/api/v1/token')
+        function getToken() {
+            fetch('/api/v1/token')
                 .then(response => response.text())
                 .then(html => {
                     let data = JSON.parse(html)
@@ -103,7 +110,7 @@
                 });
         }
 
-        function sendForm (token, formData) {
+        function sendForm(token, formData) {
 
             fetch('/api/v1/users', {
                 method: 'POST',
@@ -129,10 +136,10 @@
                         document.getElementById('errors').style.display = 'block';
                         document.getElementById('errors').innerHTML = '<div class="text-xl">' + jsonResponse.message + '</div>';
 
-                        if(jsonResponse.fails) {
+                        if (jsonResponse.fails) {
                             for (let key in jsonResponse.fails) {
                                 jsonResponse.fails[key].forEach(function (fail) {
-                                    document.getElementById('errors').innerHTML += '<div>'+fail+'</div>';
+                                    document.getElementById('errors').innerHTML += '<div>' + fail + '</div>';
                                 })
                             }
                         }
@@ -160,6 +167,7 @@
                 console.log(users);
                 users.forEach(function (user) {
                     document.getElementById('users-container').innerHTML +=
+                        '<div><img src="' + user.photo + '" alt="photo-' + user.name + '"/></div>' +
                         '<div>' + user.name + '</div>' +
                         '<div>' + user.email + '</div>' +
                         '<div>' + user.phone + '</div>' +

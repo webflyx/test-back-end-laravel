@@ -63,7 +63,7 @@ class UserService
             $skipByPage = ($page - 1) * $count;
         }
 
-        $users = User::all();
+        $users = User::orderBy('created_at', 'DESC')->get();
         $usersCount = $users->count();
         $users = UserResource::collection($users->skip($offset + $skipByPage)->take($count));
 
